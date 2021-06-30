@@ -90,9 +90,13 @@ export default function LoginPage(props) {
   return (
     <div>
       <Header
-        absolute
-        color="transparent"
         rightLinks={<RightLinks />}
+        fixed
+        color="transparent"
+        changeColorOnScroll={{
+          height: 500,
+          color: "white",
+        }}
         {...rest}
       />
       <div

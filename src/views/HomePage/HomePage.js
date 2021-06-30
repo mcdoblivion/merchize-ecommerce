@@ -19,10 +19,12 @@ import RightLinks from "components/Header/RightLinks.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
 import LeftLinks from "components/Header/LeftLinks";
 import axiosInstance from "axiosInstance";
+// import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 const HomePage = (props) => {
+  // const history = useHistory();
   const classes = useStyles();
   const { ...rest } = props;
 
@@ -95,6 +97,12 @@ const HomePage = (props) => {
             <Card
               key={_id}
               style={{ width: "20rem", margin: "1rem", flex: "0 0 22%" }}
+              onClick={() =>
+                rest.history.push({
+                  pathname: "/products/" + _id,
+                  state: { productId: _id },
+                })
+              }
             >
               <img
                 style={{ height: "180px", width: "100%", display: "block" }}
