@@ -76,7 +76,7 @@ const signupPageStyle = {
     paddingTop: "0rem",
     border: "0",
     borderRadius: "6px",
-    justifyContent: "center !important",
+    justifyContent: "space-around",
   },
   socialLine: {
     marginTop: "1rem",

@@ -22,34 +22,40 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg-home.png";
-import axiosInstance from "axiosInstance";
 // @material-ui/icons
-import { AccountCircleRounded, Check } from "@material-ui/icons";
+import {
+  HomeRounded,
+  PhoneRounded,
+  TextFormatRounded,
+  AccountCircleRounded,
+  Check,
+} from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
+import axiosInstance from "axiosInstance";
 
 const useStyles = makeStyles(styles);
 
-export default function LoginPage(props) {
+export default function SignupPage(props) {
   const [cartAnimation, setCardAnimation] = React.useState("cardHidden");
-
   const history = useHistory();
-
   const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    address: "",
     username: "",
     password: "",
   });
   const [alert, setAlert] = useState({ show: false, msg: "", success: false });
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     try {
       const response = await axiosInstance.post(
-        process.env.REACT_APP_BASE_URL + "/users/account/create-jwt",
+        process.env.REACT_APP_BASE_URL + "/users/account",
         user
       );
 
       if (response.status >= 200 && response.status <= 299) {
-        localStorage.setItem("token", response.data.token);
-
         setAlert({
           show: true,
           success: true,
@@ -58,7 +64,7 @@ export default function LoginPage(props) {
 
         setTimeout(() => {
           setAlert({ ...alert, show: false });
-          history.push("/");
+          history.push("/login");
         }, 1000);
       }
     } catch (error) {
@@ -66,7 +72,7 @@ export default function LoginPage(props) {
       setAlert({
         show: true,
         success: false,
-        msg: error.response.data.err.message,
+        msg: error.response.data.msg,
       });
 
       setTimeout(() => {
@@ -143,6 +149,86 @@ export default function LoginPage(props) {
                   <p className={classes.divider}>Or Be Classical</p>
                   <CardBody>
                     <CustomInput
+                      labelText="First name"
+                      id="first-name"
+                      formControlProps={{
+                        required: true,
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        name: "firstName",
+                        value: user.firstName,
+                        onChange: handleChange,
+                        type: "text",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <TextFormatRounded
+                              className={classes.inputIconsColor}
+                            />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <CustomInput
+                      labelText="Last name"
+                      id="last-name"
+                      formControlProps={{
+                        required: true,
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        name: "lastName",
+                        value: user.lastName,
+                        onChange: handleChange,
+                        type: "text",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <TextFormatRounded
+                              className={classes.inputIconsColor}
+                            />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <CustomInput
+                      labelText="Phone number"
+                      id="phone-number"
+                      formControlProps={{
+                        required: true,
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        name: "phoneNumber",
+                        value: user.phoneNumber,
+                        onChange: handleChange,
+                        type: "text",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <PhoneRounded className={classes.inputIconsColor} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <CustomInput
+                      labelText="Address"
+                      id="address"
+                      formControlProps={{
+                        required: true,
+                        fullWidth: true,
+                      }}
+                      inputProps={{
+                        name: "address",
+                        value: user.address,
+                        onChange: handleChange,
+                        type: "text",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <HomeRounded className={classes.inputIconsColor} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <CustomInput
                       labelText="Username"
                       id="username"
                       formControlProps={{
@@ -194,12 +280,12 @@ export default function LoginPage(props) {
                     />
                   )}
                   <CardFooter className={classes.cardFooter}>
-                    <Button onClick={handleLogin} color="primary" size="lg">
-                      Login
-                    </Button>
-                    Or create an account:
-                    <Button href="/signup" size="lg">
+                    <Button color="primary" size="lg" onClick={handleSignup}>
                       Signup
+                    </Button>
+                    Have an account?
+                    <Button href="/login" size="lg">
+                      Login
                     </Button>
                   </CardFooter>
                 </form>

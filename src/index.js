@@ -7,7 +7,9 @@ import "assets/scss/material-kit-react.scss?v=1.10.0";
 
 // pages for this product
 import LoginPage from "views/LoginPage/LoginPage.js";
+import SignupPage from "views/LoginPage/SignupPage.js";
 import HomePage from "views/HomePage/HomePage";
+import Logout from "views/LoginPage/Logout";
 
 var hist = createBrowserHistory();
 
@@ -16,6 +18,8 @@ ReactDOM.render(
     <Switch>
       <Route path="/" component={HomePage} exact />
       <Route path="/login" component={LoginPage} />
+      <Route path="/signup" component={SignupPage} />
+      <Route path="/logout" component={Logout} />
     </Switch>
   </Router>,
   document.getElementById("root")

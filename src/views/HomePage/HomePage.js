@@ -18,7 +18,7 @@ import CardBody from "components/Card/CardBody.js";
 import RightLinks from "components/Header/RightLinks.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
 import LeftLinks from "components/Header/LeftLinks";
-import axios from "axios";
+import axiosInstance from "axiosInstance";
 
 const useStyles = makeStyles(styles);
 
@@ -27,14 +27,13 @@ const HomePage = (props) => {
   const { ...rest } = props;
 
   const [products, setProducts] = useState([]);
+  const [comments, setComments] = useState([]);
 
   const getProducts = async () => {
     try {
-      const response = await axios.get(
-        process.env.REACT_APP_BASE_URL + "/products"
-      );
+      const response = await axiosInstance.get("/products");
       if (response.status >= 200 && response.status <= 299) {
-        console.log(response.data.data);
+        console.log("Product:", response.data.data);
         const products = response.data.data;
         setProducts(products);
       }
@@ -43,8 +42,22 @@ const HomePage = (props) => {
     }
   };
 
+  const getComments = async () => {
+    try {
+      const response = await axiosInstance.get("/products/comments");
+      if (response.status >= 200 && response.status <= 299) {
+        console.log("Comments:", response.data.data);
+        const comments = response.data.data;
+        setComments(comments);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getProducts();
+    getComments();
   }, []);
   return (
     <React.Fragment>
@@ -71,8 +84,13 @@ const HomePage = (props) => {
         }}
       >
         {products.map((product) => {
-          const { _id, name, images, description, price, comments, category } =
-            product;
+          const { _id, name, images, description, price, category } = product;
+          const productComments = comments.filter(
+            (comment) => comment.product === _id
+          );
+          const rating =
+            productComments.reduce((acc, c) => acc + c.rating, 0) /
+            productComments.length;
           return (
             <Card
               key={_id}
@@ -98,14 +116,7 @@ const HomePage = (props) => {
                   <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
                 </div>
                 <p style={{ margin: "0" }}>#{category}</p>
-                <Rating
-                  value={
-                    comments.reduce((acc, c) => acc + c.rating, 0) /
-                      comments.length || 2.5
-                  }
-                  precision={0.5}
-                  readOnly
-                ></Rating>
+                <Rating value={rating || 2.5} precision={0.5} readOnly></Rating>
                 <p style={{ height: "7rem" }}>{description.slice(0, 100)}</p>
                 <div
                   style={{

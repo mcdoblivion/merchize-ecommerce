@@ -1,8 +1,8 @@
 /*eslint-disable*/
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,10 +12,22 @@ import ListItem from "@material-ui/core/ListItem";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
+import CustomDropdown from "components/CustomDropdown/CustomDropdown";
+import checkLogin from "checkLogin";
 
 const useStyles = makeStyles(styles);
 
 export default function RightLinks(props) {
+  const [account, setAccount] = useState({});
+
+  useEffect(async () => {
+    const loginInfo = await checkLogin.loggedIn();
+    if (loginInfo.success) {
+      setAccount({ ...account, loggedIn: true, text: loginInfo.name });
+    } else {
+      setAccount({ ...account, loggedIn: false, text: "Account" });
+    }
+  }, []);
   const classes = useStyles();
   return (
     <List className={classes.list}>
@@ -40,9 +52,33 @@ export default function RightLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button href="/login" color="transparent" className={classes.navLink}>
-          <h4>Login</h4>
-        </Button>
+        <CustomDropdown
+          hoverColor="black"
+          buttonText={<h4>{account.text}</h4>}
+          buttonProps={{
+            color: "transparent",
+            className: classes.navLink,
+          }}
+          dropdownList={
+            account.loggedIn
+              ? [
+                  <Link to="#">
+                    <p>Profile</p>
+                  </Link>,
+                  <Link to="/logout">
+                    <p>Logout</p>
+                  </Link>,
+                ]
+              : [
+                  <Link to="/login">
+                    <p>Login</p>
+                  </Link>,
+                  <Link to="/signup">
+                    <p>Signup</p>
+                  </Link>,
+                ]
+          }
+        />
       </ListItem>
     </List>
   );
