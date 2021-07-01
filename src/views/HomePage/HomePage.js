@@ -95,6 +95,7 @@ const HomePage = (props) => {
             productComments.length;
           return (
             <Card
+              id={_id}
               key={_id}
               style={{ width: "20rem", margin: "1rem", flex: "0 0 22%" }}
               onClick={() =>
@@ -102,6 +103,9 @@ const HomePage = (props) => {
                   pathname: "/products/" + _id,
                   state: { productId: _id },
                 })
+              }
+              onMouseOver={() =>
+                (document.getElementById(_id).style.cursor = "pointer")
               }
             >
               <img
