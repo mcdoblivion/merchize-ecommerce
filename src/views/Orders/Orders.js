@@ -19,12 +19,16 @@ import { Check } from "@material-ui/icons";
 import SnackbarContent from "components/Snackbar/SnackbarContent";
 
 import axiosInstance from "axiosInstance";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
 
 export default function Orders(props) {
   const classes = useStyles();
   const { ...rest } = props;
+  const history = useHistory();
+
+  const isSellOrder = rest.isSellOrder || "false";
 
   const [orders, setOrders] = useState([]);
   const [alert, setAlert] = useState({
@@ -37,9 +41,11 @@ export default function Orders(props) {
     try {
       let response = null;
       if (status != null) {
-        response = await axiosInstance.get(`/orders?status=${status}`);
+        response = await axiosInstance.get(
+          `/orders?status=${status}&sellOrder=${isSellOrder}`
+        );
       } else {
-        response = await axiosInstance.get("/orders");
+        response = await axiosInstance.get(`/orders?sellOrder=${isSellOrder}`);
       }
       console.log(response.data);
       setOrders(response.data.data);
@@ -56,6 +62,38 @@ export default function Orders(props) {
       console.log(response.data);
 
       getOrders(-1);
+
+      setAlert({
+        show: true,
+        success: true,
+        msg: response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
+    } catch (error) {
+      console.log(error.response.data);
+      setAlert({
+        show: true,
+        success: false,
+        msg: error.response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
+    }
+  };
+
+  const handleConfirmOrder = (orderId) => async () => {
+    try {
+      const response = await axiosInstance.put(
+        `orders/${orderId}?operation=confirm`
+      );
+      console.log(response.data);
+
+      getOrders(1);
 
       setAlert({
         show: true,
@@ -109,6 +147,23 @@ export default function Orders(props) {
         style={{ height: "15rem" }}
       />
       <div className={classNames(classes.main, classes.mainRaised)}>
+        {isSellOrder === "true" && (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "start",
+            }}
+          >
+            <Button
+              onClick={() => history.push("/seller/products")}
+              color="primary"
+              style={{ margin: "1rem" }}
+            >
+              Back to products
+            </Button>
+          </div>
+        )}
         <Card>
           <div
             style={{
@@ -141,7 +196,7 @@ export default function Orders(props) {
         >
           {orders &&
             orders.map((order) => {
-              const { _id, seller, orderItems, status } = order;
+              const { _id, customer, seller, orderItems, status } = order;
               return (
                 <GridContainer key={_id}>
                   <Card style={{ width: "90vw" }}>
@@ -168,9 +223,22 @@ export default function Orders(props) {
                         padding: "0 1rem",
                       }}
                     >
-                      <h4>
-                        Seller: {seller.firstName + " " + seller.lastName}
-                      </h4>
+                      {isSellOrder === "true" ? (
+                        <div>
+                          <h4 style={{ fontWeight: "bold" }}>
+                            Customer:{" "}
+                            {customer.firstName + " " + customer.lastName}
+                          </h4>
+                          <h6>
+                            Address: {customer.address}, Phone:{" "}
+                            {customer.phoneNumber}
+                          </h6>
+                        </div>
+                      ) : (
+                        <h4 style={{ fontWeight: "bold" }}>
+                          Seller: {seller.firstName + " " + seller.lastName}
+                        </h4>
+                      )}
                       <h4>
                         Status:{" "}
                         {status == -1
@@ -183,8 +251,18 @@ export default function Orders(props) {
                         <Button
                           onClick={handleCancelOrder(_id)}
                           color="primary"
+                          style={{ height: "2.5rem" }}
                         >
                           Cancel order
+                        </Button>
+                      )}
+                      {isSellOrder === "true" && status == 0 && (
+                        <Button
+                          style={{ height: "2.5rem" }}
+                          onClick={handleConfirmOrder(_id)}
+                          color="primary"
+                        >
+                          Confirm order
                         </Button>
                       )}
                     </div>
@@ -231,18 +309,19 @@ export default function Orders(props) {
                                   marginLeft: "2rem",
                                 }}
                               >
-                                <img
-                                  src={
-                                    process.env.REACT_APP_BASE_URL +
-                                    product.images[0]
-                                  }
-                                  alt={product.name}
-                                  style={{
-                                    width: "auto",
-                                    height: "7rem",
-                                    borderRadius: "1rem",
-                                  }}
-                                />
+                                {product.images.map((image, index) => (
+                                  <img
+                                    key={index}
+                                    src={process.env.REACT_APP_BASE_URL + image}
+                                    alt={product.name}
+                                    style={{
+                                      width: "auto",
+                                      height: "7rem",
+                                      borderRadius: "1rem",
+                                      margin: "0 0.5rem",
+                                    }}
+                                  />
+                                ))}
                               </div>
                               <div
                                 style={{

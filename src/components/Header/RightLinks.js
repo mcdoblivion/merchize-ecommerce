@@ -25,11 +25,13 @@ export default function RightLinks(props) {
 
   const getCart = async () => {
     try {
-      const cartItems = await axiosInstance.get("/carts");
-      console.log("Cart:", cartItems);
-      setCardItems(cartItems.data.data.length);
+      if (account.loggedIn) {
+        const cartItems = await axiosInstance.get("/carts");
+        console.log("Cart:", cartItems);
+        setCardItems(cartItems.data.data.length);
+      } else return;
     } catch (error) {
-      console.log(err);
+      console.log(error);
     }
   };
 

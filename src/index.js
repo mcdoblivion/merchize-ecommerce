@@ -13,6 +13,7 @@ import Logout from "views/LoginPage/Logout";
 import ProductDetail from "./views/Products/ProductDetail";
 import Cart from "./views/Cart/Cart";
 import Orders from "./views/Orders/Orders";
+import SellPage from "./views/Seller/SellPage";
 var hist = createBrowserHistory();
 
 ReactDOM.render(
@@ -25,6 +26,11 @@ ReactDOM.render(
       <Route path="/products/" component={ProductDetail} />
       <Route path="/cart" component={Cart} />
       <Route path="/orders" component={Orders} />
+      <Route
+        path="/seller/orders"
+        render={(props) => <Orders {...props} isSellOrder="true" />}
+      />
+      <Route path="/seller/products" component={SellPage} />
     </Switch>
   </Router>,
   document.getElementById("root")
