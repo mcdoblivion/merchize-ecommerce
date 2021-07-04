@@ -23,8 +23,14 @@ import CardBody from "components/Card/CardBody";
 import { Rating } from "@material-ui/lab";
 import axiosInstance from "axiosInstance";
 import CustomInput from "components/CustomInput/CustomInput";
-import { AddRounded, CommentRounded, RemoveRounded } from "@material-ui/icons";
+import {
+  AddRounded,
+  Check,
+  CommentRounded,
+  RemoveRounded,
+} from "@material-ui/icons";
 import { Input, InputAdornment } from "@material-ui/core";
+import SnackbarContent from "components/Snackbar/SnackbarContent";
 
 const useStyles = makeStyles(styles);
 
@@ -34,8 +40,12 @@ export default function ProductDetail(props) {
 
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
-  const [rating, setRating] = useState(2.5);
   const [quantity, setQuantity] = useState("1");
+  const [alert, setAlert] = useState({
+    show: false,
+    msg: "",
+    success: false,
+  });
 
   const getProduct = async () => {
     try {
@@ -59,12 +69,77 @@ export default function ProductDetail(props) {
         console.log("Comments:", response.data.data);
         const comments = response.data.data;
         setComments(comments);
-        const finalRating =
-          comments.reduce((acc, c) => acc + c.rating, 0) / comments.length;
-        setRating(finalRating);
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const createCart = async () => {
+    try {
+      const response = await axiosInstance.post("/carts", {
+        product: product._id,
+        quantity: Number(quantity),
+      });
+
+      console.log(response);
+
+      setAlert({
+        show: true,
+        success: true,
+        msg: response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
+    } catch (error) {
+      console.log(error.response);
+      setAlert({
+        show: true,
+        success: false,
+        msg: error.response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
+    }
+  };
+
+  const createOrder = async () => {
+    try {
+      const response = await axiosInstance.post("/orders", [
+        {
+          seller: product.seller._id,
+          product: product._id,
+          quantity: quantity,
+        },
+      ]);
+      getProduct();
+
+      console.log(response);
+
+      setAlert({
+        show: true,
+        success: true,
+        msg: response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
+    } catch (error) {
+      console.log(error.response);
+      setAlert({
+        show: true,
+        success: false,
+        msg: error.response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
     }
   };
 
@@ -147,16 +222,34 @@ export default function ProductDetail(props) {
                         justifyContent: "space-between",
                       }}
                     >
-                      <h4 style={{ margin: "0" }} className={classes.cardTitle}>
+                      <h3 style={{ margin: "0" }} className={classes.cardTitle}>
                         {product.name}
-                      </h4>
-                      <h4 style={{ margin: "0" }}>
+                      </h3>
+                      <h3 style={{ margin: "0" }}>
                         ${(1.0 * product.price) / 100}
+                      </h3>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4>
+                        Seller:
+                        {product.seller
+                          ? " " +
+                            product.seller.firstName +
+                            " " +
+                            product.seller.lastName
+                          : "null"}
                       </h4>
+                      <h4>Number in stock:{" " + product.numberInStock}</h4>
                     </div>
                     <p style={{ margin: "0" }}>#{product.category}</p>
                     <Rating
-                      value={rating || 2.5}
+                      value={product.rating || 2.5}
                       precision={0.5}
                       readOnly
                     ></Rating>
@@ -166,6 +259,15 @@ export default function ProductDetail(props) {
               </GridItem>
               <GridItem>
                 <div>
+                  <div>
+                    {alert.show && (
+                      <SnackbarContent
+                        message={<span>{alert.msg}</span>}
+                        color={alert.success ? "success" : "danger"}
+                        icon={alert.success ? Check : "info_outline"}
+                      />
+                    )}
+                  </div>
                   <div
                     style={{
                       display: "flex",
@@ -191,10 +293,18 @@ export default function ProductDetail(props) {
                       justifyContent: "center",
                     }}
                   >
-                    <Button style={{ marginRight: "2rem" }} color="info">
+                    <Button
+                      onClick={createCart}
+                      style={{ marginRight: "2rem" }}
+                      color="info"
+                    >
                       Add to cart
                     </Button>
-                    <Button style={{ marginLeft: "2rem" }} color="primary">
+                    <Button
+                      onClick={createOrder}
+                      style={{ marginLeft: "2rem" }}
+                      color="primary"
+                    >
                       Buy
                     </Button>
                   </div>
@@ -202,20 +312,13 @@ export default function ProductDetail(props) {
               </GridItem>
               <GridItem>
                 {comments &&
-                  comments.map((comment) => {
+                  comments.map((pComment) => {
+                    const { _id, author, rating, comment } = pComment;
                     return (
-                      <Card key={comment._id} style={{ padding: "0 1rem" }}>
-                        <h4>
-                          {comment.author.firstName +
-                            " " +
-                            comment.author.lastName}
-                        </h4>
-                        <Rating
-                          value={rating || 2.5}
-                          precision={0.5}
-                          readOnly
-                        ></Rating>
-                        <p>{comment.comment}</p>
+                      <Card key={_id} style={{ padding: "0 1rem" }}>
+                        <h4>{author.firstName + " " + author.lastName}</h4>
+                        <Rating value={rating} readOnly></Rating>
+                        <p>{comment}</p>
                       </Card>
                     );
                   })}

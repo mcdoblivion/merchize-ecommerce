@@ -10,7 +10,9 @@ import LoginPage from "views/LoginPage/LoginPage.js";
 import SignupPage from "views/LoginPage/SignupPage.js";
 import HomePage from "views/HomePage/HomePage";
 import Logout from "views/LoginPage/Logout";
-import ProductDetail from "views/Products/ProductDetail";
+import ProductDetail from "./views/Products/ProductDetail";
+import Cart from "./views/Cart/Cart";
+import Orders from "./views/Orders/Orders";
 var hist = createBrowserHistory();
 
 ReactDOM.render(
@@ -21,6 +23,8 @@ ReactDOM.render(
       <Route path="/signup" component={SignupPage} />
       <Route path="/logout" component={Logout} />
       <Route path="/products/" component={ProductDetail} />
+      <Route path="/cart" component={Cart} />
+      <Route path="/orders" component={Orders} />
     </Switch>
   </Router>,
   document.getElementById("root")

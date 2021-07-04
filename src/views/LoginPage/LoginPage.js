@@ -43,7 +43,7 @@ export default function LoginPage(props) {
   const handleLogin = async () => {
     try {
       const response = await axiosInstance.post(
-        process.env.REACT_APP_BASE_URL + "/users/account/create-jwt",
+        process.env.REACT_APP_API_URL + "/users/account/create-jwt",
         user
       );
 
@@ -66,7 +66,7 @@ export default function LoginPage(props) {
       setAlert({
         show: true,
         success: false,
-        msg: error.response.data.err.message,
+        msg: error.response.data.msg,
       });
 
       setTimeout(() => {

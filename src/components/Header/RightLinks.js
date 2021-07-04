@@ -14,11 +14,24 @@ import Button from "components/CustomButtons/Button.js";
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
 import CustomDropdown from "components/CustomDropdown/CustomDropdown";
 import checkLogin from "checkLogin";
+import { Badge } from "@material-ui/core";
+import axiosInstance from "axiosInstance";
 
 const useStyles = makeStyles(styles);
 
 export default function RightLinks(props) {
   const [account, setAccount] = useState({});
+  const [cartItems, setCardItems] = useState(0);
+
+  const getCart = async () => {
+    try {
+      const cartItems = await axiosInstance.get("/carts");
+      console.log("Cart:", cartItems);
+      setCardItems(cartItems.data.data.length);
+    } catch (error) {
+      console.log(err);
+    }
+  };
 
   useEffect(async () => {
     const loginInfo = await checkLogin.loggedIn();
@@ -27,6 +40,8 @@ export default function RightLinks(props) {
     } else {
       setAccount({ ...account, loggedIn: false, text: "Account" });
     }
+
+    getCart();
   }, []);
   const classes = useStyles();
   return (
@@ -44,10 +59,13 @@ export default function RightLinks(props) {
       <ListItem className={classes.listItem}>
         <Button href="/cart" color="transparent" className={classes.navLink}>
           <h4>Cart</h4>
+          <Badge color="primary">
+            <h4>({cartItems})</h4>
+          </Badge>
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button href="/order" color="transparent" className={classes.navLink}>
+        <Button href="/orders" color="transparent" className={classes.navLink}>
           <h4>Order</h4>
         </Button>
       </ListItem>

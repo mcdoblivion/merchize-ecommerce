@@ -10,7 +10,6 @@ import Rating from "@material-ui/lab/Rating";
 // core components
 import Header from "components/Header/Header.js";
 import Footer from "components/Footer/Footer.js";
-import Button from "components/CustomButtons/Button.js";
 import Parallax from "components/Parallax/Parallax.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -29,7 +28,6 @@ const HomePage = (props) => {
   const { ...rest } = props;
 
   const [products, setProducts] = useState([]);
-  const [comments, setComments] = useState([]);
 
   const getProducts = async () => {
     try {
@@ -44,23 +42,10 @@ const HomePage = (props) => {
     }
   };
 
-  const getComments = async () => {
-    try {
-      const response = await axiosInstance.get("/products/comments");
-      if (response.status >= 200 && response.status <= 299) {
-        console.log("Comments:", response.data.data);
-        const comments = response.data.data;
-        setComments(comments);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     getProducts();
-    getComments();
   }, []);
+
   return (
     <React.Fragment>
       <Header
@@ -82,17 +67,13 @@ const HomePage = (props) => {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: "space-around",
+          justifyContent: "start",
+          paddingLeft: "1.5rem",
         }}
       >
         {products.map((product) => {
-          const { _id, name, images, description, price, category } = product;
-          const productComments = comments.filter(
-            (comment) => comment.product === _id
-          );
-          const rating =
-            productComments.reduce((acc, c) => acc + c.rating, 0) /
-            productComments.length;
+          const { _id, name, images, description, price, category, rating } =
+            product;
           return (
             <Card
               id={_id}
@@ -128,20 +109,8 @@ const HomePage = (props) => {
                   <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
                 </div>
                 <p style={{ margin: "0" }}>#{category}</p>
-                <Rating value={rating || 2.5} precision={0.5} readOnly></Rating>
-                <p style={{ height: "7rem" }}>{description.slice(0, 100)}</p>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-around",
-                    position: "absolute",
-                    bottom: "0.5rem",
-                  }}
-                >
-                  <Button color="info">Add to cart</Button>
-                  <Button color="primary">Buy</Button>
-                </div>
+                <Rating value={rating || 3} readOnly></Rating>
+                <p>{description.slice(0, 100)}</p>
               </CardBody>
             </Card>
           );
