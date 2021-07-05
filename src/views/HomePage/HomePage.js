@@ -16,9 +16,11 @@ import CardBody from "components/Card/CardBody.js";
 // sections for this page
 import RightLinks from "components/Header/RightLinks.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
-import LeftLinks from "components/Header/LeftLinks";
 import axiosInstance from "axiosInstance";
 // import { useHistory } from "react-router-dom";
+import CustomInput from "components/CustomInput/CustomInput";
+import { InputAdornment } from "@material-ui/core";
+import { Search } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -28,10 +30,13 @@ const HomePage = (props) => {
   const { ...rest } = props;
 
   const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
 
-  const getProducts = async () => {
+  const getProducts = async (search) => {
     try {
-      const response = await axiosInstance.get("/products");
+      const response = await axiosInstance.get(
+        search != null ? `/products?search=${search}` : "/products"
+      );
       if (response.status >= 200 && response.status <= 299) {
         console.log("Product:", response.data.data);
         const products = response.data.data;
@@ -42,14 +47,17 @@ const HomePage = (props) => {
     }
   };
 
+  const handleSearchProduct = (e) => {
+    setSearch(e.target.value);
+  };
+
   useEffect(() => {
-    getProducts();
-  }, []);
+    getProducts(search);
+  }, [search]);
 
   return (
     <React.Fragment>
       <Header
-        leftLinks={<LeftLinks />}
         rightLinks={<RightLinks />}
         fixed
         color="transparent"
@@ -60,7 +68,25 @@ const HomePage = (props) => {
         {...rest}
       />
 
-      <Parallax image={require("assets/img/bg-home.png").default}></Parallax>
+      <Parallax image={require("assets/img/bg-home.png").default}>
+        <div style={{ position: "absolute", top: "5rem", left: "3rem" }}>
+          <CustomInput
+            labelText="Search some products?"
+            id="material"
+            formControlProps={{
+              fullWidth: true,
+            }}
+            inputProps={{
+              onChange: handleSearchProduct,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </div>
+      </Parallax>
 
       <div
         className={classNames(classes.main, classes.mainRaised)}
