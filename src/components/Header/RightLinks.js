@@ -54,7 +54,11 @@ export default function RightLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button href="/seller" color="transparent" className={classes.navLink}>
+        <Button
+          href="/seller/products"
+          color="transparent"
+          className={classes.navLink}
+        >
           <h4>Sell</h4>
         </Button>
       </ListItem>

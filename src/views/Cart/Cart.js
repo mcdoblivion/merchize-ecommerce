@@ -258,28 +258,30 @@ export default function Cart(props) {
             />
           )}
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            onClick={handleRemoveFromCart}
-            style={{ marginRight: "2rem" }}
-            color="info"
+        {selectedProducts.length && (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
           >
-            Remove from cart
-          </Button>
-          <Button
-            onClick={handleOrder}
-            style={{ marginLeft: "2rem" }}
-            color="primary"
-          >
-            Buy now
-          </Button>
-        </div>
+            <Button
+              onClick={handleRemoveFromCart}
+              style={{ marginRight: "2rem" }}
+              color="info"
+            >
+              Remove from cart
+            </Button>
+            <Button
+              onClick={handleOrder}
+              style={{ marginLeft: "2rem" }}
+              color="primary"
+            >
+              Buy now
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
