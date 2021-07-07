@@ -129,6 +129,7 @@ export default function SellPage(props) {
       });
       console.log(response.data);
       getProducts();
+      setShowModalModifyProduct(false);
       setAlert({
         show: true,
         success: true,
@@ -155,10 +156,16 @@ export default function SellPage(props) {
   const updateProduct = async (productId) => {
     try {
       const response = await axiosInstance.put(`/products/${productId}`, {
-        ...newProduct,
+        name: newProduct.name,
+        description: newProduct.description,
+        images: newProduct.images,
+        category: newProduct.category,
+        price: newProduct.price,
+        numberInStock: newProduct.numberInStock,
       });
       console.log(response.data);
       getProducts();
+      setShowModalModifyProduct(false);
       setAlert({
         show: true,
         success: true,
@@ -470,6 +477,13 @@ export default function SellPage(props) {
                 }}
               />
             </DialogContent>
+            {alert.show && (
+              <SnackbarContent
+                message={<span>{alert.msg}</span>}
+                color={alert.success ? "success" : "danger"}
+                icon={alert.success ? Check : "info_outline"}
+              />
+            )}
             <DialogActions
               className={classes.modalFooter + " " + classes.modalFooterCenter}
             >
@@ -483,7 +497,6 @@ export default function SellPage(props) {
               </Button>
               <Button
                 onClick={() => {
-                  setShowModalModifyProduct(false);
                   addProduct ? createProduct() : updateProduct(newProduct._id);
                 }}
                 color="success"

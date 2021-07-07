@@ -173,81 +173,89 @@ export default function Cart(props) {
             paddingLeft: "1.5rem",
           }}
         >
-          {cartItems.map((item) => {
-            const { _id, name, images, description, price, category, rating } =
-              item.product;
-            let quantity = item.quantity;
-            return (
-              <Card
-                id={_id}
-                key={_id}
-                style={{ width: "20rem", margin: "1rem", flex: "0 0 22%" }}
-                onClick={() =>
-                  rest.history.push({
-                    pathname: "/products/" + _id,
-                    state: { productId: _id },
-                  })
-                }
-                onMouseOver={() =>
-                  (document.getElementById(_id).style.cursor = "pointer")
-                }
-              >
-                <img
-                  style={{ height: "180px", width: "100%", display: "block" }}
-                  className={classes.imgCardTop}
-                  src={process.env.REACT_APP_BASE_URL + images[0]}
-                  alt={name}
-                />
-                <CardBody>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <h4 style={{ margin: "0" }} className={classes.cardTitle}>
-                      {name}
-                    </h4>
-                    <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
-                  </div>
-                  <p style={{ margin: "0" }}>#{category}</p>
-                  <Rating value={rating || 3} readOnly></Rating>
-                  <p>{description.slice(0, 100)}</p>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Button color="transparent">
-                      <RemoveRounded
-                        onClick={changeProductQuantity(_id, quantity - 1)}
-                      />
-                    </Button>
-                    <Input
-                      inputProps={{ style: { textAlign: "center" } }}
-                      value={quantity}
-                    />
-                    <Button color="transparent">
-                      <AddRounded
-                        onClick={changeProductQuantity(_id, quantity + 1)}
-                      />
-                    </Button>
-                  </div>
-                  <Checkbox
-                    onClick={(e) => handleSelectProduct(e, _id)}
-                    style={{
-                      position: "absolute",
-                      right: "0.5rem",
-                      bottom: "0.5rem",
-                    }}
+          {cartItems &&
+            cartItems.map((item) => {
+              const {
+                _id,
+                name,
+                images,
+                description,
+                price,
+                category,
+                rating,
+              } = item.product;
+              let quantity = item.quantity;
+              return (
+                <Card
+                  id={_id}
+                  key={_id}
+                  style={{ width: "20rem", margin: "1rem", flex: "0 0 22%" }}
+                  onClick={() =>
+                    rest.history.push({
+                      pathname: "/products/" + _id,
+                      state: { productId: _id },
+                    })
+                  }
+                  onMouseOver={() =>
+                    (document.getElementById(_id).style.cursor = "pointer")
+                  }
+                >
+                  <img
+                    style={{ height: "180px", width: "100%", display: "block" }}
+                    className={classes.imgCardTop}
+                    src={process.env.REACT_APP_BASE_URL + images[0]}
+                    alt={name}
                   />
-                </CardBody>
-              </Card>
-            );
-          })}
+                  <CardBody>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 style={{ margin: "0" }} className={classes.cardTitle}>
+                        {name}
+                      </h4>
+                      <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
+                    </div>
+                    <p style={{ margin: "0" }}>#{category}</p>
+                    <Rating value={rating || 3} readOnly></Rating>
+                    <p>{description.slice(0, 100)}</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Button color="transparent">
+                        <RemoveRounded
+                          onClick={changeProductQuantity(_id, quantity - 1)}
+                        />
+                      </Button>
+                      <Input
+                        inputProps={{ style: { textAlign: "center" } }}
+                        value={quantity}
+                      />
+                      <Button color="transparent">
+                        <AddRounded
+                          onClick={changeProductQuantity(_id, quantity + 1)}
+                        />
+                      </Button>
+                    </div>
+                    <Checkbox
+                      onClick={(e) => handleSelectProduct(e, _id)}
+                      style={{
+                        position: "absolute",
+                        right: "0.5rem",
+                        bottom: "0.5rem",
+                      }}
+                    />
+                  </CardBody>
+                </Card>
+              );
+            })}
         </div>
         <div>
           {alert.show && (

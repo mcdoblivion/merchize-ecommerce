@@ -197,10 +197,10 @@ export default function ProductDetail(props) {
         `/products/${productId}/comments`,
         { ...newComment }
       );
+      console.log(response.data);
+
       getComments();
       getProduct();
-
-      console.log(response.data);
 
       setAlert({
         show: true,
@@ -229,13 +229,23 @@ export default function ProductDetail(props) {
     try {
       const response = await axiosInstance.put(
         `/products/${productId}/comments/${commentId}`,
-        { ...ownComment }
+        { comment: ownComment.comment, rating: ownComment.rating }
       );
       console.log(response.data);
       getComments();
       getProduct();
+      setShowModalUpdateComment(false);
     } catch (error) {
       console.log(error.response);
+      setAlert({
+        show: true,
+        success: false,
+        msg: error.response.data.msg,
+      });
+
+      setTimeout(() => {
+        setAlert({ ...alert, show: false });
+      }, 3000);
     }
   };
 
@@ -541,6 +551,15 @@ export default function ProductDetail(props) {
                                     />
                                   </Card>
                                 </DialogContent>
+                                {alert.show && (
+                                  <SnackbarContent
+                                    message={<span>{alert.msg}</span>}
+                                    color={alert.success ? "success" : "danger"}
+                                    icon={
+                                      alert.success ? Check : "info_outline"
+                                    }
+                                  />
+                                )}
                                 <DialogActions
                                   className={
                                     classes.modalFooter +
@@ -557,7 +576,6 @@ export default function ProductDetail(props) {
                                   </Button>
                                   <Button
                                     onClick={() => {
-                                      setShowModalUpdateComment(false);
                                       updateComment(ownComment._id);
                                     }}
                                     color="success"

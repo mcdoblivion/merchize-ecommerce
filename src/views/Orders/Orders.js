@@ -268,84 +268,96 @@ export default function Orders(props) {
                     </div>
                     {orderItems.map((item, index) => {
                       const { product, quantity } = item;
-                      return (
-                        <GridItem key={product._id}>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexWrap: "wrap",
-                              justifyContent: "start",
-                              border: "1px solid black",
-                              borderRadius: "0.5rem",
-                              padding: "0.5rem",
-                              marginBottom: "0.5rem",
-                            }}
-                          >
-                            <div
-                              style={{
-                                alignSelf: "center",
-                                marginRight: "1rem",
-                              }}
-                            >
-                              <h4>{index + 1}</h4>
-                            </div>
+                      if (product) {
+                        return (
+                          <GridItem key={product._id}>
                             <div
                               style={{
                                 display: "flex",
                                 flexWrap: "wrap",
                                 justifyContent: "start",
+                                border: "1px solid black",
+                                borderRadius: "0.5rem",
+                                padding: "0.5rem",
+                                marginBottom: "0.5rem",
                               }}
                             >
-                              <div>
-                                <h4>Product: {product.name}</h4>
-                                <h4>Quantity: {quantity}</h4>
-                                <h4>Price: ${(1.0 * product.price) / 100}</h4>
+                              <div
+                                style={{
+                                  alignSelf: "center",
+                                  marginRight: "1rem",
+                                }}
+                              >
+                                <h4>{index + 1}</h4>
                               </div>
                               <div
                                 style={{
                                   display: "flex",
                                   flexWrap: "wrap",
-                                  justifyContent: "space-between",
-                                  marginLeft: "2rem",
+                                  justifyContent: "start",
                                 }}
                               >
-                                {product.images.map((image, index) => (
-                                  <img
-                                    key={index}
-                                    src={process.env.REACT_APP_BASE_URL + image}
-                                    alt={product.name}
-                                    style={{
-                                      width: "auto",
-                                      height: "7rem",
-                                      borderRadius: "1rem",
-                                      margin: "0 0.5rem",
-                                    }}
-                                  />
-                                ))}
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  position: "absolute",
-                                  right: "2rem",
-                                  top: "2rem",
-                                }}
-                              >
-                                <h3 style={{ alignSelf: "center" }}>
-                                  ${(1.0 * product.price * quantity) / 100}
-                                </h3>
+                                <div>
+                                  <h4>Product: {product.name}</h4>
+                                  <h4>Quantity: {quantity}</h4>
+                                  <h4>Price: ${(1.0 * product.price) / 100}</h4>
+                                </div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    justifyContent: "space-between",
+                                    marginLeft: "2rem",
+                                  }}
+                                >
+                                  {product.images.map((image, index) => (
+                                    <img
+                                      key={index}
+                                      src={
+                                        process.env.REACT_APP_BASE_URL + image
+                                      }
+                                      alt={product.name}
+                                      style={{
+                                        width: "auto",
+                                        height: "7rem",
+                                        borderRadius: "1rem",
+                                        margin: "0 0.5rem",
+                                      }}
+                                    />
+                                  ))}
+                                </div>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    position: "absolute",
+                                    right: "2rem",
+                                    top: "2rem",
+                                  }}
+                                >
+                                  <h3 style={{ alignSelf: "center" }}>
+                                    ${(1.0 * product.price * quantity) / 100}
+                                  </h3>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </GridItem>
-                      );
+                          </GridItem>
+                        );
+                      } else {
+                        return (
+                          <h4 key={index}>
+                            This product has been removed from shop!
+                          </h4>
+                        );
+                      }
                     })}
                     <div style={{ display: "flex", justifyContent: "center" }}>
                       <h3>
                         Total: $
                         {orderItems.reduce(
                           (sum, item) =>
-                            sum + item.quantity * item.product.price * 1.0,
+                            item.product
+                              ? sum + item.quantity * item.product.price * 1.0
+                              : 0,
                           0
                         ) / 100}
                       </h3>

@@ -51,7 +51,7 @@ export default function SignupPage(props) {
   const handleSignup = async () => {
     try {
       const response = await axiosInstance.post(
-        process.env.REACT_APP_BASE_URL + "/users/account",
+        process.env.REACT_APP_API_URL + "/users/account",
         user
       );
 

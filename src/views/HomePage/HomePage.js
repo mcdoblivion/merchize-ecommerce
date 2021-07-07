@@ -35,7 +35,7 @@ const HomePage = (props) => {
   const getProducts = async (search) => {
     try {
       const response = await axiosInstance.get(
-        search != null ? `/products?search=${search}` : "/products"
+        search !== "" ? `/products?search=${search}` : "/products"
       );
       if (response.status >= 200 && response.status <= 299) {
         console.log("Product:", response.data.data);
