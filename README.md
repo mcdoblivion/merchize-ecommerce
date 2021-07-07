@@ -2,4 +2,6 @@
 
 [Link to Express server app](https://github.com/mcdoblivion/Express-REST-API)
 
-Client app dùng để demo server app - mini project trong quá trình học tại Merchize
+Client app used to demo mini project when learning in Merchize.
+
+(Warning: Please don't view source code. You will realize it's very bad hahaha...)
