@@ -266,7 +266,7 @@ export default function Cart(props) {
             />
           )}
         </div>
-        {selectedProducts.length && (
+        {selectedProducts.length ? (
           <div
             style={{
               display: "flex",
@@ -289,7 +289,7 @@ export default function Cart(props) {
               Buy now
             </Button>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

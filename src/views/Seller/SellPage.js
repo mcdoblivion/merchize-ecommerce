@@ -619,7 +619,7 @@ export default function SellPage(props) {
             );
           })}
         </div>
-        {selectedProducts.length && (
+        {selectedProducts.length ? (
           <div
             style={{
               display: "flex",
@@ -632,7 +632,7 @@ export default function SellPage(props) {
               Remove products
             </Button>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
