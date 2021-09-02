@@ -6,7 +6,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // core components
 import Header from "components/Header/Header.js";
-import RightLinks from "components/Header/RightLinks.js";
 import LeftLinks from "components/Header/LeftLinks";
 import Footer from "components/Footer/Footer.js";
 import Button from "components/CustomButtons/Button.js";
@@ -326,7 +325,6 @@ export default function ProductDetail(props) {
     <div>
       <Header
         leftLinks={<LeftLinks />}
-        rightLinks={<RightLinks />}
         fixed
         color="transparent"
         changeColorOnScroll={{

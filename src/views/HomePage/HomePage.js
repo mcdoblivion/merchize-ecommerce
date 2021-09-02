@@ -14,7 +14,7 @@ import Parallax from "components/Parallax/Parallax.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 // sections for this page
-import RightLinks from "components/Header/RightLinks.js";
+import LeftLinks from "components/Header/LeftLinks.js";
 import styles from "assets/jss/material-kit-react/views/components.js";
 import axiosInstance from "axiosInstance";
 // import { useHistory } from "react-router-dom";
@@ -58,35 +58,42 @@ const HomePage = (props) => {
   return (
     <React.Fragment>
       <Header
-        rightLinks={<RightLinks />}
+        leftLinks={<LeftLinks />}
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 500,
+          height: 600,
           color: "white",
         }}
         {...rest}
       />
 
-      <Parallax image={require("assets/img/bg-home.png").default}>
-        <div style={{ position: "absolute", top: "5rem", left: "3rem" }}>
-          <CustomInput
-            labelText="Search some products?"
-            id="material"
-            formControlProps={{
-              fullWidth: true,
-            }}
-            inputProps={{
-              onChange: handleSearchProduct,
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-      </Parallax>
+      <Parallax image={require("assets/img/bg-home.png").default} />
+
+      <div
+        style={{
+          position: "fixed",
+          top: "1rem",
+          right: "3rem",
+          zIndex: "9999",
+        }}
+      >
+        <CustomInput
+          labelText="Search some products?"
+          id="material"
+          formControlProps={{
+            fullWidth: true,
+          }}
+          inputProps={{
+            onChange: handleSearchProduct,
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </div>
 
       <div
         className={classNames(classes.main, classes.mainRaised)}
@@ -94,7 +101,7 @@ const HomePage = (props) => {
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "start",
-          paddingLeft: "1.5rem",
+          padding: "1rem",
         }}
       >
         {products.map((product) => {
@@ -104,7 +111,7 @@ const HomePage = (props) => {
             <Card
               id={_id}
               key={_id}
-              style={{ width: "20rem", margin: "1rem", flex: "0 0 22%" }}
+              style={{ height: "25rem", margin: "0.5rem", flex: "0 0 23.88%" }}
               onClick={() =>
                 rest.history.push({
                   pathname: "/products/" + _id,
@@ -116,7 +123,11 @@ const HomePage = (props) => {
               }
             >
               <img
-                style={{ height: "180px", width: "100%", display: "block" }}
+                style={{
+                  height: "50%",
+                  objectFit: "scale-down",
+                  display: "block",
+                }}
                 className={classes.imgCardTop}
                 src={process.env.REACT_APP_BASE_URL + images[0]}
                 alt={name}
@@ -136,7 +147,11 @@ const HomePage = (props) => {
                 </div>
                 <p style={{ margin: "0" }}>#{category}</p>
                 <Rating value={rating || 3} readOnly></Rating>
-                <p>{description.slice(0, 100)}</p>
+                <p>
+                  {description.length > 200
+                    ? description.slice(0, 200) + "..."
+                    : description}
+                </p>
               </CardBody>
             </Card>
           );

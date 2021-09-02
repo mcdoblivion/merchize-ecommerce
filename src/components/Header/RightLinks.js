@@ -1,8 +1,8 @@
 /*eslint-disable*/
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 // react components for routing our app without refresh
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,95 +12,34 @@ import ListItem from "@material-ui/core/ListItem";
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
-import CustomDropdown from "components/CustomDropdown/CustomDropdown";
-import checkLogin from "checkLogin";
-import axiosInstance from "axiosInstance";
+import GridItem from "components/Grid/GridItem";
+import CustomInput from "components/CustomInput/CustomInput";
+import { InputAdornment } from "@material-ui/core";
+import { Search } from "@material-ui/icons";
+import GridContainer from "components/Grid/GridContainer";
 
 const useStyles = makeStyles(styles);
 
-export default function RightLinks(props) {
-  const [account, setAccount] = useState({});
-  const [cartItems, setCardItems] = useState(0);
-
-  const getCart = async () => {
-    try {
-      if (account.loggedIn) {
-        const foundCartItems = await axiosInstance.get("/carts");
-        console.log("Cart:", foundCartItems);
-        setCardItems(foundCartItems.data.data.length);
-      } else return;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(async () => {
-    const loginInfo = await checkLogin.loggedIn();
-    if (loginInfo.success) {
-      setAccount({ ...account, loggedIn: true, text: loginInfo.name });
-    } else {
-      setAccount({ ...account, loggedIn: false, text: "Account" });
-    }
-
-    getCart();
-  }, []);
+export default function LeftLinks(props) {
   const classes = useStyles();
   return (
-    <List className={classes.list}>
-      <ListItem className={classes.listItem}>
-        <Button href="/" color="transparent" className={classes.navLink}>
-          <h4>Home</h4>
-        </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Button
-          href="/seller/products"
-          color="transparent"
-          className={classes.navLink}
-        >
-          <h4>Sell</h4>
-        </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Button href="/cart" color="transparent" className={classes.navLink}>
-          <h4>Cart</h4>
-          <h4>({cartItems})</h4>
-        </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Button href="/orders" color="transparent" className={classes.navLink}>
-          <h4>Order</h4>
-        </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <CustomDropdown
-          hoverColor="black"
-          buttonText={<h4>{account.text}</h4>}
-          buttonProps={{
-            color: "transparent",
-            className: classes.navLink,
+    <GridContainer>
+      <GridItem xs={12} sm={12} md={4}>
+        <CustomInput
+          labelText="Search some products?"
+          id="material"
+          formControlProps={{
+            fullWidth: true,
           }}
-          dropdownList={
-            account.loggedIn
-              ? [
-                  <Link to="#">
-                    <p>Profile</p>
-                  </Link>,
-                  <Link to="/logout">
-                    <p>Logout</p>
-                  </Link>,
-                ]
-              : [
-                  <Link to="/login">
-                    <p>Login</p>
-                  </Link>,
-                  <Link to="/signup">
-                    <p>Signup</p>
-                  </Link>,
-                ]
-          }
+          inputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search />
+              </InputAdornment>
+            ),
+          }}
         />
-      </ListItem>
-    </List>
+      </GridItem>
+    </GridContainer>
   );
 }

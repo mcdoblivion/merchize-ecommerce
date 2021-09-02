@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Header from "components/Header/Header.js";
-import RightLinks from "components/Header/RightLinks.js";
 import LeftLinks from "components/Header/LeftLinks";
 import Parallax from "components/Parallax/Parallax.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -131,7 +130,6 @@ export default function Orders(props) {
     <div>
       <Header
         leftLinks={<LeftLinks />}
-        rightLinks={<RightLinks />}
         fixed
         color="transparent"
         changeColorOnScroll={{

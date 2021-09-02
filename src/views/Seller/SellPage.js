@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Header from "components/Header/Header.js";
-import RightLinks from "components/Header/RightLinks.js";
 import LeftLinks from "components/Header/LeftLinks";
 import Parallax from "components/Parallax/Parallax.js";
 
@@ -237,7 +236,6 @@ export default function SellPage(props) {
     <div>
       <Header
         leftLinks={<LeftLinks />}
-        rightLinks={<RightLinks />}
         fixed
         color="transparent"
         changeColorOnScroll={{
@@ -536,7 +534,11 @@ export default function SellPage(props) {
               <React.Fragment key={_id}>
                 <Card
                   id={_id}
-                  style={{ width: "20rem", margin: "1rem", flex: "0 0 22%" }}
+                  style={{
+                    height: "25rem",
+                    margin: "0.5rem",
+                    flex: "0 0 23.88%",
+                  }}
                   onClick={() =>
                     rest.history.push({
                       pathname: "/products/" + _id,
@@ -548,7 +550,11 @@ export default function SellPage(props) {
                   }
                 >
                   <img
-                    style={{ height: "180px", width: "100%", display: "block" }}
+                    style={{
+                      height: "50%",
+                      objectFit: "scale-down",
+                      display: "block",
+                    }}
                     className={classes.imgCardTop}
                     src={process.env.REACT_APP_BASE_URL + images[0]}
                     alt={name}
@@ -577,7 +583,11 @@ export default function SellPage(props) {
                       <h5 style={{ margin: "0" }}>Stock: {numberInStock}</h5>
                     </div>
                     <Rating value={rating || 3} readOnly></Rating>
-                    <p>{description.slice(0, 100)}</p>
+                    <p>
+                      {description.length > 100
+                        ? description.slice(0, 100) + "..."
+                        : description}
+                    </p>
                     <div
                       style={{
                         display: "flex",
@@ -601,6 +611,7 @@ export default function SellPage(props) {
                           setShowModalModifyProduct(true);
                         }}
                         color="primary"
+                        style={{ position: "absolute", bottom: "0.3rem" }}
                       >
                         Edit product
                       </Button>

@@ -1,45 +1,104 @@
 /*eslint-disable*/
-import React from "react";
+import React, { useState, useEffect } from 'react';
 
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link, useHistory } from 'react-router-dom';
 
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 
-import Button from "components/CustomButtons/Button.js";
+import Button from 'components/CustomButtons/Button.js';
 
-import styles from "assets/jss/material-kit-react/components/headerLinksStyle.js";
-import GridItem from "components/Grid/GridItem";
-import CustomInput from "components/CustomInput/CustomInput";
-import { InputAdornment } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
-import GridContainer from "components/Grid/GridContainer";
+import styles from 'assets/jss/material-kit-react/components/headerLinksStyle.js';
+import CustomDropdown from 'components/CustomDropdown/CustomDropdown';
+import checkLogin from 'checkLogin';
+import axiosInstance from 'axiosInstance';
 
 const useStyles = makeStyles(styles);
 
-export default function LeftLinks(props) {
+export default function RightLinks(props) {
+  const [account, setAccount] = useState({});
+  const [cartItems, setCardItems] = useState(0);
+
+  const getCart = async () => {
+    try {
+      if (account.loggedIn) {
+        const foundCartItems = await axiosInstance.get('/carts');
+        console.log('Cart:', foundCartItems);
+        setCardItems(foundCartItems.data.data.length);
+      } else return;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(async () => {
+    const loginInfo = await checkLogin.loggedIn();
+    if (loginInfo.success) {
+      setAccount({ ...account, loggedIn: true, text: loginInfo.name });
+    } else {
+      setAccount({ ...account, loggedIn: false, text: 'Account' });
+    }
+
+    getCart();
+  }, []);
   const classes = useStyles();
   return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={4}>
-        <CustomInput
-          labelText="Search some products?"
-          id="material"
-          formControlProps={{
-            fullWidth: true,
-          }}
-          inputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </GridItem>
-    </GridContainer>
+    <div style={{ position: 'fixed', top: '1rem', left: '2rem' }}>
+      <List className={classes.list}>
+        <ListItem className={classes.listItem}>
+          <Button href='/' color='transparent' className={classes.navLink}>
+            <h4 style={{ fontWeight: '400' }}>Home</h4>
+          </Button>
+        </ListItem>
+        <ListItem className={classes.listItem}>
+          <Button href='/seller/products' color='transparent' className={classes.navLink}>
+            <h4 style={{ fontWeight: '400' }}>Sell</h4>
+          </Button>
+        </ListItem>
+        <ListItem className={classes.listItem}>
+          <Button href='/cart' color='transparent' className={classes.navLink}>
+            <h4 style={{ fontWeight: '400' }}>Cart</h4>
+            <h4 style={{ fontWeight: '400' }}>({cartItems})</h4>
+          </Button>
+        </ListItem>
+        <ListItem className={classes.listItem}>
+          <Button href='/orders' color='transparent' className={classes.navLink}>
+            <h4 style={{ fontWeight: '400' }}>Order</h4>
+          </Button>
+        </ListItem>
+        <ListItem className={classes.listItem}>
+          <CustomDropdown
+            hoverColor='black'
+            buttonText={<h4 style={{ fontWeight: '400' }}>{account.text}</h4>}
+            buttonProps={{
+              color: 'transparent',
+              className: classes.navLink,
+            }}
+            dropdownList={
+              account.loggedIn
+                ? [
+                    <Link to='#'>
+                      <p>Profile</p>
+                    </Link>,
+                    <Link to='/logout'>
+                      <p>Logout</p>
+                    </Link>,
+                  ]
+                : [
+                    <Link to='/login'>
+                      <p>Login</p>
+                    </Link>,
+                    <Link to='/signup'>
+                      <p>Signup</p>
+                    </Link>,
+                  ]
+            }
+          />
+        </ListItem>
+      </List>
+    </div>
   );
 }
