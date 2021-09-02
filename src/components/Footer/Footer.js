@@ -33,53 +33,51 @@ export default function Footer(props) {
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/?ref=mkr-footer"
+                href="https://www.facebook.com/mcd.oblivion"
                 className={classes.block}
                 target="_blank"
               >
-                Creative Tim
+                Cuong Dong Minh
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/presentation?ref=mkr-footer"
+                href="https://github.com/mcdoblivion"
                 className={classes.block}
                 target="_blank"
               >
-                About us
+                Github
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="http://blog.creative-tim.com/?ref=mkr-footer"
+                href="https://www.linkedin.com/in/mcdoblivion/"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
-              </a>
-            </ListItem>
-            <ListItem className={classes.inlineBlock}>
-              <a
-                href="https://www.creative-tim.com/license?ref=mkr-footer"
-                className={classes.block}
-                target="_blank"
-              >
-                Licenses
+                LinkedIn
               </a>
             </ListItem>
           </List>
         </div>
         <div className={classes.right}>
-          &copy; {1900 + new Date().getYear()} , made with{" "}
-          <Favorite className={classes.icon} /> by{" "}
+          &copy; {1900 + new Date().getYear()}, made by{" "}
           <a
-            href="https://www.creative-tim.com?ref=mkr-footer"
+            href="https://www.facebook.com/mcd.oblivion"
             className={aClasses}
             target="_blank"
           >
-            Creative Tim
-          </a>{" "}
-          for a better web.
+            Cuong Dong Minh
+          </a>
+          <br />
+          This is a project during summer internship 2021 at{" "}
+          <a
+            href="https://merchize.com/"
+            className={aClasses}
+            target="_blank"
+          >
+            Merchize
+          </a>
         </div>
       </div>
     </footer>
