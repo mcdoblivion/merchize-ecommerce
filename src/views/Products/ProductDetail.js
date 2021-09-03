@@ -328,7 +328,7 @@ export default function ProductDetail(props) {
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 500,
+          height: 200,
           color: "white",
         }}
         {...rest}
@@ -351,6 +351,11 @@ export default function ProductDetail(props) {
                         return (
                           <div key={index}>
                             <img
+                              style={{
+                                height: "30rem",
+                                objectFit: "scale-down",
+                                display: "block",
+                              }}
                               src={process.env.REACT_APP_BASE_URL + image}
                               alt={product.name}
                               className="slick-image"

@@ -151,7 +151,7 @@ export default function Cart(props) {
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 500,
+          height: 200,
           color: "white",
         }}
         {...rest}
@@ -199,7 +199,11 @@ export default function Cart(props) {
                   }
                 >
                   <img
-                    style={{ height: "180px", width: "100%", display: "block" }}
+                    style={{
+                      height: "50%",
+                      objectFit: "scale-down",
+                      display: "block",
+                    }}
                     className={classes.imgCardTop}
                     src={process.env.REACT_APP_BASE_URL + images[0]}
                     alt={name}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 // react components for routing our app without refresh
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,25 +14,11 @@ import Button from 'components/CustomButtons/Button.js';
 import styles from 'assets/jss/material-kit-react/components/headerLinksStyle.js';
 import CustomDropdown from 'components/CustomDropdown/CustomDropdown';
 import checkLogin from 'checkLogin';
-import axiosInstance from 'axiosInstance';
 
 const useStyles = makeStyles(styles);
 
-export default function RightLinks(props) {
+export default function LeftLinks(props) {
   const [account, setAccount] = useState({});
-  const [cartItems, setCardItems] = useState(0);
-
-  const getCart = async () => {
-    try {
-      if (account.loggedIn) {
-        const foundCartItems = await axiosInstance.get('/carts');
-        console.log('Cart:', foundCartItems);
-        setCardItems(foundCartItems.data.data.length);
-      } else return;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(async () => {
     const loginInfo = await checkLogin.loggedIn();
@@ -41,8 +27,6 @@ export default function RightLinks(props) {
     } else {
       setAccount({ ...account, loggedIn: false, text: 'Account' });
     }
-
-    getCart();
   }, []);
   const classes = useStyles();
   return (
@@ -61,7 +45,6 @@ export default function RightLinks(props) {
         <ListItem className={classes.listItem}>
           <Button href='/cart' color='transparent' className={classes.navLink}>
             <h4 style={{ fontWeight: '400' }}>Cart</h4>
-            <h4 style={{ fontWeight: '400' }}>({cartItems})</h4>
           </Button>
         </ListItem>
         <ListItem className={classes.listItem}>

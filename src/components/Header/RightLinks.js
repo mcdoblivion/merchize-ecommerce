@@ -20,7 +20,7 @@ import GridContainer from "components/Grid/GridContainer";
 
 const useStyles = makeStyles(styles);
 
-export default function LeftLinks(props) {
+export default function RightLinks(props) {
   const classes = useStyles();
   return (
     <GridContainer>

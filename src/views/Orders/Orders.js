@@ -133,7 +133,7 @@ export default function Orders(props) {
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 500,
+          height: 200,
           color: "white",
         }}
         {...rest}
