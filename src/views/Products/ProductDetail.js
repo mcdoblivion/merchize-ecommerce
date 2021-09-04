@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -47,7 +48,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function ProductDetail(props) {
   const { ...rest } = props;
-  const productId = rest.location.state.productId;
+  const { id: productId } = useParams();
 
   const [userId, setUserId] = useState("");
   const [product, setProduct] = useState({});
@@ -342,7 +343,7 @@ export default function ProductDetail(props) {
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div className="product">
           <div className={classes.container}>
-            <GridContainer justify="center">
+            <GridContainer justifyContent="center">
               <GridItem xs={12} sm={12}>
                 <Card>
                   <Carousel {...settings}>

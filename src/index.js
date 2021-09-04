@@ -8,6 +8,7 @@ import "assets/scss/material-kit-react.scss?v=1.10.0";
 // pages for this product
 import LoginPage from "views/LoginPage/LoginPage.js";
 import SignupPage from "views/LoginPage/SignupPage.js";
+import ProfilePage from "views/ProfilePage/ProfilePage";
 import HomePage from "views/HomePage/HomePage";
 import Logout from "views/LoginPage/Logout";
 import ProductDetail from "./views/Products/ProductDetail";
@@ -23,7 +24,8 @@ ReactDOM.render(
       <Route path="/login" component={LoginPage} />
       <Route path="/signup" component={SignupPage} />
       <Route path="/logout" component={Logout} />
-      <Route path="/products/" component={ProductDetail} />
+      <Route path="/profile" component={ProfilePage} />
+      <Route path="/products/:id" component={ProductDetail} />
       <Route path="/cart" component={Cart} />
       <Route path="/orders" component={Orders} />
       <Route
