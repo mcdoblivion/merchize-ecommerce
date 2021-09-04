@@ -36,6 +36,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 
 import axiosInstance from "axiosInstance";
+import Bluebird from "bluebird";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
@@ -211,13 +212,41 @@ export default function SellPage(props) {
       if (addProduct) {
         const arr = imagePath.split("/");
         const imageName = arr[arr.length - 1];
-        const response = await axiosInstance.delete(`/images/${imageName}`);
-        console.log(response.data);
+        await axiosInstance.delete(`/images/${imageName}`);
       }
       const newImages = newProduct.images.filter(
         (image) => image !== imagePath
       );
       setNewProduct({ ...newProduct, images: newImages });
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const handleModifyProduct = async () => {
+    try {
+      const images = addProduct
+        ? newProduct.images
+        : newProduct.images.filter((img) => {
+            const imagesBefore = products.find(
+              (p) => p._id === newProduct._id
+            ).images;
+            return !imagesBefore.includes(img);
+          });
+
+      const imageNames = images.map((image) => {
+        const arr = image.split("/");
+        return arr[arr.length - 1];
+      });
+
+      await Bluebird.map(
+        imageNames,
+        async (imageName) => {
+          const vResponse = await axiosInstance.delete(`/images/${imageName}`);
+          return vResponse.data;
+        },
+        { concurrency: imageNames.length }
+      );
     } catch (error) {
       console.log(error.response);
     }
@@ -284,7 +313,11 @@ export default function SellPage(props) {
             open={showModalModifyProduct}
             TransitionComponent={Transition}
             keepMounted
-            onClose={() => setShowModalModifyProduct(false)}
+            onClose={async () => {
+              setShowModalModifyProduct(false);
+              await handleModifyProduct();
+              setNewProduct({});
+            }}
             aria-labelledby="modal-slide-title"
             aria-describedby="modal-slide-description"
           >
@@ -309,9 +342,10 @@ export default function SellPage(props) {
                 key="close"
                 aria-label="Close"
                 color="inherit"
-                onClick={() => {
-                  setNewProduct({});
+                onClick={async () => {
                   setShowModalModifyProduct(false);
+                  await handleModifyProduct();
+                  setNewProduct({});
                 }}
               >
                 <Close className={classes.modalClose} />
@@ -405,6 +439,7 @@ export default function SellPage(props) {
                 id="product-images"
                 formControlProps={{
                   required: true,
+                  fullWidth: true,
                 }}
                 inputProps={{
                   name: "imageFile",
@@ -486,9 +521,10 @@ export default function SellPage(props) {
               className={classes.modalFooter + " " + classes.modalFooterCenter}
             >
               <Button
-                onClick={() => {
-                  setNewProduct({});
+                onClick={async () => {
                   setShowModalModifyProduct(false);
+                  await handleModifyProduct();
+                  setNewProduct({});
                 }}
               >
                 Cancel
@@ -605,7 +641,7 @@ export default function SellPage(props) {
                             category: category,
                             price: ((price * 1.0) / 100).toString(),
                             numberInStock: numberInStock,
-                            images: images,
+                            images: [...images],
                           });
                           setAddProduct(false);
                           setShowModalModifyProduct(true);
