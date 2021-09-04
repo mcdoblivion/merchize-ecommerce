@@ -114,7 +114,7 @@ export default function SignupPage(props) {
         }}
       >
         <div className={classes.container}>
-          <GridContainer justify="center">
+          <GridContainer justifyContent="center">
             <GridItem xs={12} sm={6}>
               <Card className={classes[cartAnimation]}>
                 <form className={classes.form}>

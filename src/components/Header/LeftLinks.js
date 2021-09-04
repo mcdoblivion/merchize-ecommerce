@@ -63,7 +63,7 @@ export default function LeftLinks(props) {
             dropdownList={
               account.loggedIn
                 ? [
-                    <Link to='#'>
+                    <Link to='/profile'>
                       <p>Profile</p>
                     </Link>,
                     <Link to='/logout'>
