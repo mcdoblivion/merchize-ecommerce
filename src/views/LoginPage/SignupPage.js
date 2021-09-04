@@ -264,6 +264,9 @@ export default function SignupPage(props) {
                         name: "password",
                         value: user.password,
                         onChange: handleChange,
+                        onKeyUp: (e) => {
+                          if (e.keyCode === 13) handleSignup();
+                        },
                         type: "password",
                         endAdornment: (
                           <InputAdornment position="end">
