@@ -23,6 +23,7 @@ import { InputAdornment } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
+const scrollHeight = window.innerHeight;
 
 const HomePage = (props) => {
   // const history = useHistory();
@@ -62,7 +63,7 @@ const HomePage = (props) => {
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 600,
+          height: scrollHeight * 0.7,
           color: "white",
         }}
         {...rest}
@@ -117,56 +118,68 @@ const HomePage = (props) => {
           } = product;
           return (
             numberInStock > 0 && (
-              <Card
-                id={_id}
+              <div
                 key={_id}
                 style={{
-                  height: "25rem",
-                  margin: "0.5rem",
-                  flex: "0 0 23.88%",
+                  padding: "1rem",
+                  width: "25%",
                 }}
-                onClick={() =>
-                  rest.history.push({
-                    pathname: "/products/" + _id,
-                    state: { productId: _id },
-                  })
-                }
-                onMouseOver={() =>
-                  (document.getElementById(_id).style.cursor = "pointer")
-                }
               >
-                <img
+                <Card
+                  id={_id}
                   style={{
-                    height: "50%",
-                    objectFit: "scale-down",
-                    display: "block",
+                    height: "25rem",
+                    margin: "0",
+                    flex: "0 0 25%",
                   }}
-                  className={classes.imgCardTop}
-                  src={process.env.REACT_APP_BASE_URL + images[0]}
-                  alt={name}
-                />
-                <CardBody>
-                  <div
+                  onClick={() =>
+                    rest.history.push({
+                      pathname: "/products/" + _id,
+                      state: { productId: _id },
+                    })
+                  }
+                  onMouseOver={() =>
+                    (document.getElementById(_id).style.cursor = "pointer")
+                  }
+                >
+                  <img
                     style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-between",
+                      height: "50%",
+                      objectFit: "scale-down",
+                      display: "block",
                     }}
-                  >
-                    <h4 style={{ margin: "0" }} className={classes.cardTitle}>
-                      {name}
-                    </h4>
-                    <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
-                  </div>
-                  <p style={{ margin: "0" }}>#{category}</p>
-                  <Rating value={rating || 3} readOnly></Rating>
-                  <p>
-                    {description.length > 200
-                      ? description.slice(0, 200) + "..."
-                      : description}
-                  </p>
-                </CardBody>
-              </Card>
+                    className={classes.imgCardTop}
+                    src={process.env.REACT_APP_BASE_URL + images[0]}
+                    alt={name}
+                  />
+                  <CardBody>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 style={{ margin: "0" }} className={classes.cardTitle}>
+                        {name}
+                      </h4>
+                      <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
+                    </div>
+                    <p style={{ margin: "0" }}>#{category}</p>
+                    <Rating value={rating || 3} readOnly></Rating>
+                    <p
+                      style={{
+                        maxHeight: "3.6rem",
+                        lineHeight: "1.2rem",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {description}
+                    </p>
+                  </CardBody>
+                </Card>
+              </div>
             )
           );
         })}

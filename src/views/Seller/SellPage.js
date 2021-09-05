@@ -40,6 +40,7 @@ import Bluebird from "bluebird";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(styles);
+const scrollHeight = window.innerHeight;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -268,7 +269,7 @@ export default function SellPage(props) {
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 500,
+          height: scrollHeight * 0.2,
           color: "white",
         }}
         {...rest}
@@ -552,7 +553,7 @@ export default function SellPage(props) {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "start",
-            paddingLeft: "1.5rem",
+            padding: "1rem",
           }}
         >
           {products.map((product) => {
@@ -568,100 +569,113 @@ export default function SellPage(props) {
             } = product;
             return (
               <React.Fragment key={_id}>
-                <Card
-                  id={_id}
-                  style={{
-                    height: "25rem",
-                    margin: "0.5rem",
-                    flex: "0 0 23.88%",
-                  }}
-                  onClick={() =>
-                    rest.history.push({
-                      pathname: "/products/" + _id,
-                      state: { productId: _id },
-                    })
-                  }
-                  onMouseOver={() =>
-                    (document.getElementById(_id).style.cursor = "pointer")
-                  }
-                >
-                  <img
+                <div style={{ width: "25%", padding: "0.5rem" }}>
+                  <Card
+                    id={_id}
                     style={{
-                      height: "50%",
-                      objectFit: "scale-down",
-                      display: "block",
+                      height: "25rem",
                     }}
-                    className={classes.imgCardTop}
-                    src={process.env.REACT_APP_BASE_URL + images[0]}
-                    alt={name}
-                  />
-                  <CardBody>
-                    <div
+                    onClick={() =>
+                      rest.history.push({
+                        pathname: "/products/" + _id,
+                        state: { productId: _id },
+                      })
+                    }
+                    onMouseOver={() =>
+                      (document.getElementById(_id).style.cursor = "pointer")
+                    }
+                  >
+                    <img
                       style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        justifyContent: "space-between",
+                        height: "50%",
+                        objectFit: "scale-down",
+                        display: "block",
                       }}
-                    >
-                      <h4 style={{ margin: "0" }} className={classes.cardTitle}>
-                        {name}
-                      </h4>
-                      <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <p style={{ margin: "0" }}>#{category}</p>
-                      <h5 style={{ margin: "0" }}>Stock: {numberInStock}</h5>
-                    </div>
-                    <Rating value={rating || 3} readOnly></Rating>
-                    <p>
-                      {description.length > 100
-                        ? description.slice(0, 100) + "..."
-                        : description}
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setNewProduct({
-                            _id: _id,
-                            name: name,
-                            description: description,
-                            category: category,
-                            price: ((price * 1.0) / 100).toString(),
-                            numberInStock: numberInStock,
-                            images: [...images],
-                          });
-                          setAddProduct(false);
-                          setShowModalModifyProduct(true);
-                        }}
-                        color="primary"
-                        style={{ position: "absolute", bottom: "0.3rem" }}
-                      >
-                        Edit product
-                      </Button>
-                      <Checkbox
-                        onClick={(e) => handleSelectProduct(e, _id)}
+                      className={classes.imgCardTop}
+                      src={process.env.REACT_APP_BASE_URL + images[0]}
+                      alt={name}
+                    />
+                    <CardBody>
+                      <div
                         style={{
-                          position: "absolute",
-                          right: "0",
-                          bottom: "0",
+                          display: "flex",
+                          justifyContent: "space-between",
                         }}
-                      />
-                    </div>
-                  </CardBody>
-                </Card>
+                      >
+                        <h4
+                          style={{
+                            margin: "0",
+                            maxHeight: "1rem",
+                            lineHeight: "1rem",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                          className={classes.cardTitle}
+                        >
+                          {name}
+                        </h4>
+                        <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <p style={{ margin: "0" }}>#{category}</p>
+                        <h5 style={{ margin: "0" }}>Stock: {numberInStock}</h5>
+                      </div>
+                      <Rating value={rating || 3} readOnly></Rating>
+                      <p
+                        style={{
+                          height: "2rem",
+                          lineHeight: "1rem",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {description}
+                      </p>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setNewProduct({
+                              _id: _id,
+                              name: name,
+                              description: description,
+                              category: category,
+                              price: ((price * 1.0) / 100).toString(),
+                              numberInStock: numberInStock,
+                              images: [...images],
+                            });
+                            setAddProduct(false);
+                            setShowModalModifyProduct(true);
+                          }}
+                          color="primary"
+                          style={{ position: "absolute", bottom: "0.3rem" }}
+                        >
+                          Edit product
+                        </Button>
+                        <Checkbox
+                          onClick={(e) => handleSelectProduct(e, _id)}
+                          style={{
+                            position: "absolute",
+                            right: "0",
+                            bottom: "0",
+                          }}
+                        />
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
               </React.Fragment>
             );
           })}

@@ -20,6 +20,7 @@ import SnackbarContent from "components/Snackbar/SnackbarContent";
 import axiosInstance from "axiosInstance";
 
 const useStyles = makeStyles(styles);
+const scrollHeight = window.innerHeight;
 
 export default function Cart(props) {
   const classes = useStyles();
@@ -151,7 +152,7 @@ export default function Cart(props) {
         fixed
         color="transparent"
         changeColorOnScroll={{
-          height: 200,
+          height: scrollHeight * 0.15,
           color: "white",
         }}
         {...rest}
