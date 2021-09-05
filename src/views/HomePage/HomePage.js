@@ -105,55 +105,69 @@ const HomePage = (props) => {
         }}
       >
         {products.map((product) => {
-          const { _id, name, images, description, price, category, rating } =
-            product;
+          const {
+            _id,
+            name,
+            images,
+            description,
+            price,
+            category,
+            rating,
+            numberInStock,
+          } = product;
           return (
-            <Card
-              id={_id}
-              key={_id}
-              style={{ height: "25rem", margin: "0.5rem", flex: "0 0 23.88%" }}
-              onClick={() =>
-                rest.history.push({
-                  pathname: "/products/" + _id,
-                  state: { productId: _id },
-                })
-              }
-              onMouseOver={() =>
-                (document.getElementById(_id).style.cursor = "pointer")
-              }
-            >
-              <img
+            numberInStock > 0 && (
+              <Card
+                id={_id}
+                key={_id}
                 style={{
-                  height: "50%",
-                  objectFit: "scale-down",
-                  display: "block",
+                  height: "25rem",
+                  margin: "0.5rem",
+                  flex: "0 0 23.88%",
                 }}
-                className={classes.imgCardTop}
-                src={process.env.REACT_APP_BASE_URL + images[0]}
-                alt={name}
-              />
-              <CardBody>
-                <div
+                onClick={() =>
+                  rest.history.push({
+                    pathname: "/products/" + _id,
+                    state: { productId: _id },
+                  })
+                }
+                onMouseOver={() =>
+                  (document.getElementById(_id).style.cursor = "pointer")
+                }
+              >
+                <img
                   style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-between",
+                    height: "50%",
+                    objectFit: "scale-down",
+                    display: "block",
                   }}
-                >
-                  <h4 style={{ margin: "0" }} className={classes.cardTitle}>
-                    {name}
-                  </h4>
-                  <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
-                </div>
-                <p style={{ margin: "0" }}>#{category}</p>
-                <Rating value={rating || 3} readOnly></Rating>
-                <p>
-                  {description.length > 200
-                    ? description.slice(0, 200) + "..."
-                    : description}
-                </p>
-              </CardBody>
-            </Card>
+                  className={classes.imgCardTop}
+                  src={process.env.REACT_APP_BASE_URL + images[0]}
+                  alt={name}
+                />
+                <CardBody>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <h4 style={{ margin: "0" }} className={classes.cardTitle}>
+                      {name}
+                    </h4>
+                    <h4 style={{ margin: "0" }}>${(1.0 * price) / 100}</h4>
+                  </div>
+                  <p style={{ margin: "0" }}>#{category}</p>
+                  <Rating value={rating || 3} readOnly></Rating>
+                  <p>
+                    {description.length > 200
+                      ? description.slice(0, 200) + "..."
+                      : description}
+                  </p>
+                </CardBody>
+              </Card>
+            )
           );
         })}
       </div>
