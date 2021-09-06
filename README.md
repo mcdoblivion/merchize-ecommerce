@@ -1,4 +1,4 @@
-# Merchize e-commerce
+# [Merchize e-commerce](https://merchize.cuongdm.tech)
 
 [Link to Express server app](https://github.com/mcdoblivion/Express-REST-API)
 
