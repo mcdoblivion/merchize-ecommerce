@@ -42,10 +42,12 @@ export default function Orders(props) {
       let response = null;
       if (status != null) {
         response = await axiosInstance.get(
-          `/orders?status=${status}&sellOrder=${isSellOrder}`
+          `/orders?status=${status}&isSellOrder=${isSellOrder}`
         );
       } else {
-        response = await axiosInstance.get(`/orders?sellOrder=${isSellOrder}`);
+        response = await axiosInstance.get(
+          `/orders?isSellOrder=${isSellOrder}`
+        );
       }
       console.log(response.data);
       setOrders(response.data.data);
