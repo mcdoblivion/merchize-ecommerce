@@ -481,7 +481,7 @@ export default function ProductDetail(props) {
                             <p>{comment}</p>
                           </div>
                           {userId === author._id && (
-                            <div>
+                            <div style={{ alignSelf: "center" }}>
                               <Dialog
                                 classes={{
                                   root: classes.center,
