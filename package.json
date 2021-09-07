@@ -1,7 +1,7 @@
 {
-  "name": "material-kit-react",
-  "version": "1.10.0",
-  "description": "Material Kit React. Coded by Creative Tim",
+  "name": "merchize-ecommerce",
+  "version": "1.0.0",
+  "description": "Created by Cuong Dong Minh. This is a project during summer internship 2021 at Merchize",
   "private": true,
   "main": "src/index.js",
   "dependencies": {
